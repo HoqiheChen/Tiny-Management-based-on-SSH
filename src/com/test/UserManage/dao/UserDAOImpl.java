@@ -1,0 +1,40 @@
+package com.test.UserManage.dao;
+
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import java.util.List;
+
+import org.hibernate.Query;
+import com.test.UserManage.entity.User;
+
+public class UserDAOImpl extends HibernateDaoSupport implements UserDAO{
+	
+	public void save(User user){
+		this.getHibernateTemplate().save(user);
+	}
+	
+	public User getUser(String name){
+		String hsql="from User u where u.name='" + name + "'";
+		User result=(User)((Query)this.getHibernateTemplate().find(hsql)).uniqueResult();
+		return result;
+	}
+	
+	public void delete(int id){
+		this.getHibernateTemplate().delete(findById(id));
+	}
+	
+	public void update(User user){
+		this.getHibernateTemplate().update(user);
+	}
+	
+	public User findById(int id){
+		User user=(User)this.getHibernateTemplate().get(User.class, id);
+		return user;
+	}
+	
+	public List<User> findAll(){
+		String queryString="from User";
+		List<User> list=this.getHibernateTemplate().find(queryString);
+		return list;
+	}
+}
